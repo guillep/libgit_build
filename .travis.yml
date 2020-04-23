@@ -12,8 +12,13 @@ addons:
     packages: 
       - libssh2-1-dev
   homebrew:
+    update: true
     packages: 
       - libssh2
+
+install:
+  - if [ $TRAVIS_OS_NAME = "windows" ]; then choco install libssh2; fi
+  - if [ $TRAVIS_OS_NAME = "osx" ]; then export PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig"; fi
 
 script:
   - git clone https://github.com/libgit2/libgit2.git libgit2 -b v1.0.0
@@ -21,7 +26,6 @@ script:
   - cd build
   - cmake ../libgit2
   - cmake --build .
-  - ctest -V #Run the tests
 
 deploy:
   provider: releases
