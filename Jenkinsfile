@@ -1,5 +1,6 @@
 pipeline {
   stages { 
+    agent any
     stage('Clone') {
       steps {
         git 'https://github.com/jenkinsci/git-plugin'
