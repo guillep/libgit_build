@@ -3,13 +3,13 @@ pipeline {
   stages { 
     stage('Clone') {
       steps {
-        sh 'git clone https://github.com/jenkinsci/git-plugin'
+        sh 'git clone https://github.com/libgit2/libgit2.git libgit2'
       }
     }
     stage('Build') {
       steps {
-        sh 'mkdir -p git-plugin/build'
-        dir('git-plugin/build') {
+        sh 'mkdir -p libgit2/build'
+        dir('libgit2/build') {
           sh 'cmake ..'
           sh 'cmake --build .'
         }        
