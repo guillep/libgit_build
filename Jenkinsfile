@@ -8,9 +8,9 @@ pipeline {
     stage('Build') {
       steps {
         cd git-plugin
-        mkdir -p build
-        cmake ..
-        cmake --build .
+        sh mkdir -p build
+        sh cmake ..
+        sh cmake --build .
       }
     }
   }
