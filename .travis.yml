@@ -1,0 +1,17 @@
+language: c
+install: cmake
+compiler: clang
+
+matrix:
+  include:
+    # works on Precise and Trusty
+    - os: linux
+    - os: osx
+    - os: windows
+
+script:
+  - git clone https://github.com/libgit2/libgit2.git libgit2 -b v1.0.0
+  - mkdir build
+  - cd build
+  - cmake ../libgit2
+  - cmake --build .
