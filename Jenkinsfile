@@ -3,7 +3,7 @@ pipeline {
   stages { 
     stage('Clone') {
       steps {
-        sh 'git clone https://github.com/libgit2/libgit2.git libgit2'
+        sh 'git clone https://github.com/libgit2/libgit2.git libgit2 -b v1.0.0'
       }
     }
     stage('Build') {
