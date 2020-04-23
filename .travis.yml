@@ -13,6 +13,7 @@ script:
   - cd build
   - cmake ../libgit2
   - cmake --build .
+  - ctest -V #Run the tests
 
 deploy:
   provider: releases
