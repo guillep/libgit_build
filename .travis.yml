@@ -7,6 +7,14 @@ matrix:
   - os: osx
   - os: windows
 
+addons:
+  apt:
+    packages: 
+      - libssh2-1-dev
+  homebrew:
+    packages: 
+      - libssh2
+
 script:
   - git clone https://github.com/libgit2/libgit2.git libgit2 -b v1.0.0
   - mkdir build
