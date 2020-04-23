@@ -1,13 +1,11 @@
 language: c
 install: cmake
 compiler: clang
-
 matrix:
   include:
-    # works on Precise and Trusty
-    - os: linux
-    - os: osx
-    - os: windows
+  - os: linux
+  - os: osx
+  - os: windows
 
 script:
   - git clone https://github.com/libgit2/libgit2.git libgit2 -b v1.0.0
@@ -15,3 +13,18 @@ script:
   - cd build
   - cmake ../libgit2
   - cmake --build .
+
+deploy:
+  provider: releases
+  api_key: $GH_TOKEN
+  file: 
+    - build\Debug\git2.dll
+    - libgit2.so
+    - libgit2.dylib
+  skip_cleanup: true
+  on:
+    tags: true
+
+env:
+  global:
+    secure: kfjG/fcHgBImCnBfczZ93YrPYhd/nyPAOq5o6e5Hfynyvz6y7y8x2OgGM/woPTv3Y02b/GEmyRXdl7W50EFYDCRFsBQ4zCvgW8sHlmGvuZeDj8L3s7Lc7kfgy8hGx79IvyR5ZnHWQi+2ax0TpcA2EE02KG6yJQFSvnRmjqgNCGzPkdU+1m5+IuyniVKCaZ4O1PjhnOsZFWyb+mpydSSL6BVC5ceEAeEOMo0TWB/oIgjUp8U3g+GTd/YkjHEf0AmrZqzXg05Jsum72e4zLOGrbWHeXPDG4avUoDm/gQBqLT+mRXe1juDYbKqI6K8hAvfF5pinazPbFuQTd3zsVhlRO8mpbCf/VAfBqMIKVlalQQV2+1gAfrATdmnt8L15AoN5H1Ddky5vjTVEIy6jfGSOYx+95gWa4ZJpdvx/XYDpEBoWEnmJ+pwmAY267WvpbCiCDdgyKZnJpZyDXmImCFkDDcMUoyA3TGuww/6MMcHLFjccB2Abmwkk/k3bXHYx2iZZAtA76o6rN908nxV3DDLfmvPTIdbOiKK5T7NLdWKneTjh9NA8P1rqFzAmCeVOhvZtrQYcyCGaB1efdHVIM+mXKq1DRiEil7YsMSCMkrzymXRD+Yet5CyRZoVjF26oHV/89EpNYFcQ62zupAwW/ogVg1g//eiLDTBPNzurX0Om75s=
