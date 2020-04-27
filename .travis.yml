@@ -22,7 +22,7 @@ before_install:
     case $TRAVIS_OS_NAME in
       windows)
         [[ ! -f C:/tools/msys64/msys2_shell.cmd ]] && rm -rf C:/tools/msys64
-        choco uninstall -y mingw
+        choco uninstall -y mingw cmake.install
         choco upgrade --no-progress -y msys2
         export msys2='cmd //C RefreshEnv.cmd '
         export msys2+='& set MSYS=winsymlinks:nativestrict '
@@ -49,18 +49,28 @@ before_cache:
 cache:
     directories:
     - $HOME/AppData/Local/Temp/chocolatey
-    - /C/tools/msys64
+#    - /C/tools/msys64
 
 
 install:
-  - if [ $TRAVIS_OS_NAME = "windows" ]; then $msys2 pacman --noconfirm -S libssh2-devel; fi
+  - |-
+    if [ $TRAVIS_OS_NAME = "windows" ]; then
+      $msys2 pacman -v --noconfirm -S mingw-w64-x86_64-libssh2 mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake mingw-w64-x86_64-openssl mingw-w64-x86_64-pcre mingw-w64-x86_64-zlib mingw-w64-x86_64-iconv msys2-w32api-runtime;
+      export BUILDPATH="/c/tools/msys64/usr/lib/w32api:/c/tools/msys64/mingw64/bin:/c/tools/msys64/mingw64/lib:/c/windows/system32:/c/windows:/c/windows/system32/Wbem"
+      export CC=gcc;
+    fi
   - if [ $TRAVIS_OS_NAME = "osx" ]; then export PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig"; fi
 
 script:
   - git clone https://github.com/libgit2/libgit2.git libgit2 -b v1.0.0
   - mkdir build
   - cd build
-  - cmake ../libgit2
+  - |-
+    if [ $TRAVIS_OS_NAME = "windows" ]; then
+      PATH="${BUILDPATH}" cmake -G "MinGW Makefiles" ../libgit2;
+    else
+      cmake ../libgit2;
+    fi
   - cmake --build .
 
 deploy:
