@@ -11,7 +11,6 @@ addons:
   apt:
     packages: 
       - libssh2-1-dev
-      - libssl2-dev
   homebrew:
     update: true
     packages: 
@@ -56,8 +55,8 @@ cache:
 install:
   - |-
     if [ $TRAVIS_OS_NAME = "windows" ]; then
-      $msys2 pacman -v --noconfirm -S mingw-w64-x86_64-libssh2 mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake mingw-w64-x86_64-openssl mingw-w64-x86_64-pcre mingw-w64-x86_64-zlib mingw-w64-x86_64-iconv msys2-w32api-runtime;
-      export BUILDPATH="/c/tools/msys64/usr/lib/w32api:/c/tools/msys64/mingw64/bin:/c/tools/msys64/mingw64/lib:/c/windows/system32:/c/windows:/c/windows/system32/Wbem"
+      $msys2 pacman -v --noconfirm -S mingw-w64-x86_64-libssh2 mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake mingw-w64-x86_64-openssl mingw-w64-x86_64-pcre mingw-w64-x86_64-zlib mingw-w64-x86_64-iconv msys2-w32api-runtime zip;
+      export BUILDPATH="/c/tools/msys64/usr/lib/w32api:/c/tools/msys64/mingw64/bin:/c/tools/msys64/mingw64/lib:/c/tools/msys64/usr/bin/:/c/windows/system32:/c/windows:/c/windows/system32/Wbem"
       export CC=gcc;
     fi
   - if [ $TRAVIS_OS_NAME = "osx" ]; then export PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig"; fi
@@ -73,14 +72,25 @@ script:
       cmake ../libgit2;
     fi
   - cmake --build .
+  - |-
+    if [ $TRAVIS_OS_NAME = "windows" ]; then
+      mv libgit2.dll libgit2-1-0-0.dll
+      $msys2 zip libgit2-win-1.0.0.zip libgit2-1-0-0.dll
+    elif [ $TRAVIS_OS_NAME = "osx" ]; then
+      mv libgit2.dylib libgit2-1.0.0.dylib
+      zip libgit2-mac-1.0.0.zip libgit2-1.0.0.dylib
+    else
+      mv libgit2.so libgit2.1.0.0.so
+      zip libgit2-linux-1.0.0.zip libgit2.1.0.0.so
+    fi
 
 deploy:
   provider: releases
   api_key: $GH_TOKEN
   file: 
-    - libgit2.dll
-    - libgit2.so
-    - libgit2.dylib
+    - libgit2-linux-1.0.0.zip
+    - libgit2-mac-1.0.0.zip
+    - libgit2-win-1.0.0.zip
   skip_cleanup: true
   on:
     tags: true
