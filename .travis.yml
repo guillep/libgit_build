@@ -77,8 +77,7 @@ script:
       mv libgit2.dll libgit2-1-0-0.dll
       $msys2 zip libgit2-win-1.0.0.zip libgit2-1-0-0.dll
     elif [ $TRAVIS_OS_NAME = "osx" ]; then
-      mv libgit2.dylib libgit2-1.0.0.dylib
-      zip libgit2-mac-1.0.0.zip libgit2-1.0.0.dylib
+      zip libgit2-mac-1.0.0.zip libgit2.1.0.0.dylib
     else
       mv libgit2.so libgit2.1.0.0.so
       zip libgit2-linux-1.0.0.zip libgit2.1.0.0.so
