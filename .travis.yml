@@ -77,6 +77,9 @@ script:
       mv libgit2.dll libgit2-1-0-0.dll
       $msys2 zip libgit2-win-1.0.0.zip libgit2-1-0-0.dll
     elif [ $TRAVIS_OS_NAME = "osx" ]; then
+      # Update the RPath to be relative to the VM plugins
+      install_name_tool -id "@executable_path/Plugins/libgit2.1.0.0.dylib" pharo-vm/Pharo.app/Contents/MacOS/Plugins/libgit2.1.0.0.dylib
+      install_name_tool -change "/usr/local/opt/libssh2/lib/libssh2.1.dylib" "@executable_path/Plugins/libssh2.1.dylib" pharo-vm/Pharo.app/Contents/MacOS/Plugins/libgit2.1.0.0.dylib
       zip libgit2-mac-1.0.0.zip libgit2.1.0.0.dylib
     else
       mv libgit2.so libgit2.1.0.0.so
